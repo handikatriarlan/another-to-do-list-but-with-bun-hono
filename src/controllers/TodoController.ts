@@ -28,18 +28,21 @@ export const getTodos = async (c: Context) => {
 
 export async function createTodo(c: Context) {
   try {
-    const body = await c.req.parseBody()
+    const body = await c.req.json().catch(() => null)
 
-    const title = typeof body["title"] === "string" ? body["title"].trim() : ""
-    if (!title) {
+    if (!body || typeof body.title !== "string" || !body.title.trim()) {
       return c.json(
-        { success: false, message: "Title is required!", data: null },
+        {
+          success: false,
+          message: "Title is required and must be a valid string!",
+          data: null,
+        },
         400
       )
     }
 
     const todo = await prisma.todo.create({
-      data: { title },
+      data: { title: body.title.trim() },
     })
 
     return c.json(
@@ -72,7 +75,6 @@ export async function getTodoById(c: Context) {
     })
 
     if (!todo) {
-      //return JSON
       return c.json(
         {
           success: false,
@@ -97,6 +99,74 @@ export async function getTodoById(c: Context) {
       {
         success: false,
         message: `Error finding todo: ${e}`,
+        data: null,
+      },
+      500
+    )
+  }
+}
+
+export async function updateTodoTitle(c: Context) {
+  try {
+    const todoId = parseInt(c.req.param("id"))
+
+    if (isNaN(todoId)) {
+      return c.json(
+        { success: false, message: "Invalid ID format!", data: null },
+        400
+      )
+    }
+
+    const todo = await prisma.todo.findUnique({
+      where: { id: todoId },
+    })
+
+    if (!todo) {
+      return c.json(
+        {
+          success: false,
+          message: "Todo Not Found!",
+          data: null,
+        },
+        404
+      )
+    }
+
+    const body = await c.req.json().catch(() => null)
+
+    if (!body || typeof body.title !== "string" || !body.title.trim()) {
+      return c.json(
+        {
+          success: false,
+          message: "Title is required and must be a valid string!",
+          data: null,
+        },
+        400
+      )
+    }
+
+    const todoUpdate = await prisma.todo.update({
+      where: { id: todoId },
+      data: {
+        title: body.title.trim(),
+        updatedAt: new Date(),
+      },
+    })
+
+    return c.json(
+      {
+        success: true,
+        message: "Todo Updated Successfully!",
+        data: todoUpdate,
+      },
+      200
+    )
+  } catch (e: unknown) {
+    console.error(`Error updating todo: ${e}`)
+    return c.json(
+      {
+        success: false,
+        message: "An unexpected error occurred while updating todo.",
         data: null,
       },
       500
