@@ -25,3 +25,40 @@ export const getTodos = async (c: Context) => {
     )
   }
 }
+
+export async function createTodo(c: Context) {
+  try {
+    const body = await c.req.parseBody()
+
+    const title = typeof body["title"] === "string" ? body["title"].trim() : ""
+    if (!title) {
+      return c.json(
+        { success: false, message: "Title is required!", data: null },
+        400
+      )
+    }
+
+    const todo = await prisma.todo.create({
+      data: { title },
+    })
+
+    return c.json(
+      {
+        success: true,
+        message: "Todo Created Successfully!",
+        data: todo,
+      },
+      201
+    )
+  } catch (e: unknown) {
+    console.error(`Error creating todo: ${e}`)
+    return c.json(
+      {
+        success: false,
+        message: `Error creating todo: ${e}`,
+        data: null,
+      },
+      500
+    )
+  }
+}
