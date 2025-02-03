@@ -228,3 +228,31 @@ export async function updateTodoStatus(c: Context) {
     )
   }
 }
+
+export async function deleteTodo(c: Context) {
+  try {
+    const todoId = parseInt(c.req.param("id"))
+
+    await prisma.todo.delete({
+      where: { id: todoId },
+    })
+
+    return c.json(
+      {
+        success: true,
+        message: "Todo Deleted Successfully!",
+      },
+      200
+    )
+  } catch (e: unknown) {
+    console.error(`Error deleting todo: ${e}`)
+    return c.json(
+      {
+        success: false,
+        message: `Error deleting todo: ${e}`,
+        data: null,
+      },
+      500
+    )
+  }
+}
