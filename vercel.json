@@ -1,0 +1,13 @@
+{
+    "build": {
+        "env": {
+            "BUN_VERSION": "latest"
+        }
+    },
+    "routes": [
+        {
+            "src": "/api/(.*)",
+            "dest": "/"
+        }
+    ]
+}
