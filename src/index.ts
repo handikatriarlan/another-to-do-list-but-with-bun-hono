@@ -1,9 +1,10 @@
 import { Hono } from "hono"
+import { handle } from "hono/vercel"
 import { cors } from "hono/cors"
-import { Routes } from "./routes"
+import Routes from "./routes"
 import { inject } from "@vercel/analytics"
 
-const app = new Hono()
+const app = new Hono().basePath("/api")
 
 app.use("*", cors())
 
@@ -12,6 +13,6 @@ app.use("*", async (c, next) => {
   await next()
 })
 
-app.route("/api", Routes)
+app.route("/", Routes)
 
-export default app
+export default handle(app)

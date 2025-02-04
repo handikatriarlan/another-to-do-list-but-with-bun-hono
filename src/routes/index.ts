@@ -17,4 +17,4 @@ router.patch("/todos/:id/title", updateTodoTitle)
 router.patch("/todos/:id/status", updateTodoStatus)
 router.delete("/todos/:id", deleteTodo)
 
-export const Routes = router
+export default router
