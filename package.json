@@ -2,7 +2,8 @@
   "name": "another-to-do-list-but-with-bun-hono",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-    "start": "bun src/index.ts"
+    "start": "bun src/index.ts",
+    "build": "bun build src/index.ts --outdir build"
   },
   "dependencies": {
     "@prisma/client": "^6.3.0",
