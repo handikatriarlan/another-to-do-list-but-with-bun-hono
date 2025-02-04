@@ -10,11 +10,11 @@ import {
 
 const router = new Hono()
 
-router.get("/", (c) => getTodos(c))
-router.post("/", (c) => createTodo(c))
-router.get("/:id", (c) => getTodoById(c))
-router.patch("/:id/title", (c) => updateTodoTitle(c))
-router.patch("/:id/status", (c) => updateTodoStatus(c))
-router.delete("/:id", (c) => deleteTodo(c))
+router.get("/todos", getTodos)
+router.post("/todos", createTodo)
+router.get("/todos/:id", getTodoById)
+router.patch("/todos/:id/title", updateTodoTitle)
+router.patch("/todos/:id/status", updateTodoStatus)
+router.delete("/todos/:id", deleteTodo)
 
 export const Routes = router

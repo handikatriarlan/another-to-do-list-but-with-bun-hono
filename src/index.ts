@@ -12,8 +12,6 @@ app.use("*", async (c, next) => {
   await next()
 })
 
-app.route("/api/todos", Routes)
+app.route("/api", Routes)
 
 export default app
-
-export const fetch = app.fetch
