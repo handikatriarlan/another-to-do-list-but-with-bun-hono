@@ -2,7 +2,7 @@
   "name": "another-to-do-list-but-with-bun-hono",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-    "start": "./build/app",
+    "start": "bun src/index.ts",
     "build": "bun build src/index.ts --minify --compile --outfile ./build/app"
   },
   "dependencies": {
